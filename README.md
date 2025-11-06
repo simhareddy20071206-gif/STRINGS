@@ -1,289 +1,402 @@
-Here’s a **quick and complete note** on the **“Valid Palindrome”** concept in **Strings (DSA)** 👇
+
+
+# 🧠 STRINGS IN DSA — COMPLETE CONCEPT + PROBLEMS GUIDE
 
 ---
 
-## 🧩 Problem Concept: Valid Palindrome
+## 🧱 1. BASICS OF STRINGS
 
-### 🔹 Definition
+### 🔹 What is a String?
 
-A **palindrome** is a string that reads the same forward and backward.
-Example:
-
-* `"madam"` ✅
-* `"racecar"` ✅
-* `"hello"` ❌
-
----
-
-## 🎯 Problem Statement (Typical LeetCode #125)
-
-> Given a string `s`, determine if it is a **palindrome**, considering only **alphanumeric characters** and ignoring **cases**.
-
-**Example:**
-
-```
-Input: "A man, a plan, a canal: Panama"
-Output: true
-Explanation: "amanaplanacanalpanama" is a palindrome.
-```
-
----
-
-## 🧠 Key Points to Remember
-
-1. Ignore **non-alphanumeric characters** (`a-z`, `A-Z`, `0-9` only).
-2. Ignore **case sensitivity** (i.e., `'A'` == `'a'`).
-3. Check if the processed string reads the same forward and backward.
-
----
-
-## ⚙️ Approaches
-
-### **Approach 1: Using Two Pointers (Optimal – O(n))**
-
-#### Steps:
-
-1. Initialize two pointers — `left = 0`, `right = s.size() - 1`.
-2. Move pointers inward:
-
-   * Skip non-alphanumeric characters.
-   * Compare `tolower(s[left])` and `tolower(s[right])`.
-3. If all pairs match, it’s a palindrome.
-
-#### ✅ C++ Code:
+A **string** is a **sequence of characters**, stored as an array of characters ending with a **null character ('\0')** in C/C++, or a dynamic object in C++ STL (`std::string`).
 
 ```cpp
-#include <iostream>
-#include <cctype>
-using namespace std;
+string s = "hello";
+cout << s.length(); // 5
+```
 
+In C++ STL:
+
+* Strings are **mutable**, i.e., you can modify them.
+* Internally stored as a dynamic char array.
+
+---
+
+### 🔹 Common Operations
+
+| Operation          | Example                 | Time Complexity |
+| ------------------ | ----------------------- | --------------- |
+| `s.length()`       | Get size                | O(1)            |
+| `s[i]`             | Access character        | O(1)            |
+| `s.substr(i, len)` | Extract substring       | O(len)          |
+| `s.find("abc")`    | Find pattern            | O(n*m)          |
+| `s + t`            | Concatenate             | O(n+m)          |
+| `s.compare(t)`     | Lexicographical compare | O(min(n, m))    |
+
+---
+
+### 🧩 Problems:
+
+1. Reverse a string
+2. Count vowels/consonants
+3. Check if a string is palindrome
+
+---
+
+### ✅ Example — Palindrome Check
+
+**Concept:** Two pointers moving inward.
+
+```cpp
 bool isPalindrome(string s) {
-    int left = 0, right = s.size() - 1;
-
-    while (left < right) {
-        while (left < right && !isalnum(s[left])) left++;
-        while (left < right && !isalnum(s[right])) right--;
-
-        if (tolower(s[left]) != tolower(s[right]))
+    int l = 0, r = s.size() - 1;
+    while (l < r) {
+        if (s[l++] != s[r--])
             return false;
-
-        left++;
-        right--;
     }
     return true;
 }
-
-int main() {
-    string s = "A man, a plan, a canal: Panama";
-    cout << (isPalindrome(s) ? "True" : "False");
-}
 ```
 
 ---
 
-### **Approach 2: Filter + Reverse Check**
+## ⚙️ 2. STRING TRAVERSAL & COMPARISON
 
-#### Steps:
+### 🔹 Lexicographical Order
 
-1. Build a cleaned string with only lowercase alphanumeric chars.
-2. Check if `cleaned == reversed(cleaned)`.
+Just like dictionary order — `'a' < 'b'`.
 
-#### ✅ Python Example:
-
-```python
-def isPalindrome(s: str) -> bool:
-    cleaned = ''.join(ch.lower() for ch in s if ch.isalnum())
-    return cleaned == cleaned[::-1]
-```
-
----
-
-## ⏱️ Time and Space Complexity
-
-| Approach         | Time Complexity | Space Complexity |
-| ---------------- | --------------- | ---------------- |
-| Two Pointers     | O(n)            | O(1)             |
-| Filter + Reverse | O(n)            | O(n)             |
-
----
-
-## 💡 Variations
-
-1. **Valid Palindrome II** – You can delete at most one character to make it palindrome.
-2. **Longest Palindromic Substring**
-3. **Count Palindromic Substrings**
-
----
-
-## 🧩 Practice Tips
-
-* Try implementing with **manual filtering** (no extra string).
-* Practice both **iterative** and **string manipulation** approaches.
-* Don’t forget to handle **edge cases**:
-
-  * Empty string → palindrome ✅
-  * Only symbols → palindrome ✅ (`"!!!"` → `""`)
-
-Here are your **clear and complete notes** on the **“Reverse Words in a String”** problem — written in a **concept + logic + code + complexity** style (perfect for DSA fundamentals revision). 👇
-
----
-
-## 🧩 **Topic: Reverse Words in a String**
-
----
-
-### 🔹 **Definition**
-
-> Given a string `s` containing words separated by spaces,
-> reverse the order of the words while removing extra spaces.
-
-**Example:**
-
-```
-Input:  "  the sky   is blue  "
-Output: "blue is sky the"
-```
-
----
-
-### 🔹 **Goal**
-
-* Words → sequences of non-space characters
-* Reverse the order of words
-* Remove:
-
-  * Leading spaces
-  * Trailing spaces
-  * Multiple spaces between words
-
----
-
-## 🧠 **Concept**
-
-This is a **fundamental string manipulation** problem —
-it tests your ability to handle **spaces**, **tokenization**, and **joining** words.
-
----
-
-### ⚙️ **Approach 1: Using StringStream (Simple & Clean)**
-
-#### Steps:
-
-1. Use `stringstream` to extract words (it automatically skips extra spaces).
-2. Store them in a vector.
-3. Reverse the vector.
-4. Join back with a single space.
-
----
-
-### 💻 **C++ Code**
+You can directly use:
 
 ```cpp
-#include <iostream>
-#include <sstream>
-#include <vector>
-#include <algorithm>
-using namespace std;
+if(s1 < s2) cout << "s1 comes first";
+```
 
-string reverseWords(string s) {
-    stringstream ss(s);
-    string word;
-    vector<string> words;
+---
 
-    while (ss >> word) {        // extract words ignoring extra spaces
-        words.push_back(word);
+### 🔹 Reverse a String
+
+```cpp
+reverse(s.begin(), s.end());
+```
+
+or manually:
+
+```cpp
+for(int i=0, j=s.size()-1; i<j; i++, j--)
+    swap(s[i], s[j]);
+```
+
+---
+
+### 🧩 Problems:
+
+1. Reverse words in a sentence
+2. Find smallest and largest lexicographical substring
+3. Rotate string (left/right)
+
+---
+
+## 🔢 3. CHARACTER FREQUENCY & HASHING
+
+### 🔹 Concept:
+
+Every string problem eventually breaks down to **frequency of characters**.
+
+We use:
+
+```cpp
+int freq[26] = {0};
+for(char c : s) freq[c - 'a']++;
+```
+
+or:
+
+```cpp
+unordered_map<char, int> freq;
+for(char c : s) freq[c]++;
+```
+
+---
+
+### 🧩 Problems:
+
+1. **Check if two strings are anagrams**
+
+```cpp
+bool isAnagram(string s, string t) {
+    if(s.size() != t.size()) return false;
+    vector<int> count(26, 0);
+    for(int i=0; i<s.size(); i++){
+        count[s[i]-'a']++;
+        count[t[i]-'a']--;
     }
+    for(int c: count) if(c!=0) return false;
+    return true;
+}
+```
 
-    reverse(words.begin(), words.end());
+2. **First non-repeating character**
+3. **Group anagrams** (Leetcode 49)
+4. **Rearrange string by frequency**
 
-    string result;
-    for (int i = 0; i < words.size(); i++) {
-        result += words[i];
-        if (i != words.size() - 1)
-            result += " ";
+---
+
+## 🪟 4. SLIDING WINDOW (VERY IMPORTANT)
+
+### 🔹 Concept:
+
+When you need to analyze **substrings** (continuous part of string), you use the **sliding window** technique.
+
+Maintain a window [l..r] → move right pointer to expand, left to shrink.
+
+---
+
+### 🧠 Core Intuition:
+
+Instead of checking all substrings (`O(n²)`), maintain information dynamically in `O(n)`.
+
+---
+
+### ✅ Example — Longest Substring Without Repeating Characters
+
+```cpp
+int lengthOfLongestSubstring(string s) {
+    vector<int> last(256, -1);
+    int start = 0, ans = 0;
+    for(int i = 0; i < s.size(); i++) {
+        if(last[s[i]] >= start)
+            start = last[s[i]] + 1;
+        last[s[i]] = i;
+        ans = max(ans, i - start + 1);
     }
-    return result;
-}
-
-int main() {
-    string s = "  the sky   is blue  ";
-    cout << reverseWords(s);
-    return 0;
+    return ans;
 }
 ```
 
 ---
 
-### ⚙️ **Approach 2: Manual Two-Pointer Method (In-place)**
+### 🧩 Problems:
 
-> Used in interviews when STL functions are restricted.
-
-#### Steps:
-
-1. Trim leading/trailing spaces.
-2. Reverse the entire string.
-3. Reverse each word individually.
-4. Remove extra spaces while rebuilding.
-
-✅ *This approach improves your two-pointer understanding.*
+1. Longest substring without repeat
+2. Longest substring with at most K distinct chars
+3. Minimum window substring
+4. Count substring with given frequency pattern
 
 ---
 
-### 🧩 **Example Walkthrough**
+## 🔍 5. PATTERN MATCHING ALGORITHMS
 
+When you need to **search a substring (pattern) inside a larger string (text)** efficiently.
+
+---
+
+### 🔹 1. Brute Force
+
+Check all starting positions
+→ Time: `O(n*m)`
+
+---
+
+### 🔹 2. KMP Algorithm (Knuth-Morris-Pratt)
+
+Avoids rechecking characters using **LPS (Longest Prefix Suffix)** array.
+Time: `O(n+m)`
+
+#### Code:
+
+```cpp
+vector<int> computeLPS(string pat) {
+    int m = pat.size(), len = 0;
+    vector<int> lps(m, 0);
+    for(int i=1; i<m; ){
+        if(pat[i] == pat[len])
+            lps[i++] = ++len;
+        else if(len != 0)
+            len = lps[len-1];
+        else
+            lps[i++] = 0;
+    }
+    return lps;
+}
 ```
-Input:  "  hello   world  "
-→ Trim: "hello   world"
-→ Reverse all: "dlrow   olleh"
-→ Reverse each word: "world hello"
-Output: "world hello"
+
+---
+
+### 🔹 3. Rabin-Karp
+
+Use **rolling hash** for substring matching
+Time: `O(n+m)` average
+
+### 🔹 4. Z Algorithm
+
+Computes the **Z-array** (length of substring starting at i which matches prefix).
+
+---
+
+### 🧩 Problems:
+
+* Search pattern in text (Leetcode #28)
+* Find number of pattern occurrences
+* Find repeated substring pattern
+
+---
+
+## 🧮 6. STRING MANIPULATION
+
+### 🔹 Remove adjacent duplicates
+
+```cpp
+string removeDuplicates(string s) {
+    string res = "";
+    for(char c : s) {
+        if(!res.empty() && res.back() == c)
+            res.pop_back();
+        else res.push_back(c);
+    }
+    return res;
+}
+```
+
+### 🔹 Compress string (Run-Length Encoding)
+
+```cpp
+string compress(string s) {
+    string res = "";
+    for(int i=0; i<s.size(); i++) {
+        int cnt = 1;
+        while(i+1<s.size() && s[i]==s[i+1]) { cnt++; i++; }
+        res += s[i] + to_string(cnt);
+    }
+    return res;
+}
 ```
 
 ---
 
-### ⏱️ **Complexity**
+### 🧩 Problems:
 
-| Type  | Complexity | Explanation                           |
-| ----- | ---------- | ------------------------------------- |
-| Time  | O(n)       | Each character processed a few times  |
-| Space | O(n)       | For storing words or temporary string |
-
----
-
-### ⚠️ **Common Mistakes**
-
-1. Not removing multiple spaces.
-2. Forgetting to trim start/end.
-3. Adding an extra space at the end while joining.
+* Remove k adjacent duplicates
+* Decode string
+* Expand run-length encoding
+* Remove specific pattern
 
 ---
 
-### 🧱 **Key Learning Points**
+## 🌲 7. TRIE (PREFIX TREE)
 
-* How to parse and clean a string.
-* How to use `stringstream` effectively.
-* Practice on space handling and reversing logic.
-* Reinforces **fundamental string operations**.
+### 🔹 Concept:
 
----
+A tree where each node represents a **character**, and every path from root to a node represents a **prefix**.
 
-### 🧭 **Variants**
+Used in:
 
-| Variant                             | Description                          |
-| ----------------------------------- | ------------------------------------ |
-| Reverse the entire string           | Reverse characters only              |
-| Reverse each word’s characters      | Keep order of words, reverse letters |
-| Reverse words in place (char array) | No extra space allowed               |
+* Word autocomplete
+* Dictionary search
+* Longest prefix match
 
 ---
 
-### 🧩 **Category**
+### ✅ Example:
 
-✅ **Fundamental String Problem** —
-Builds the foundation for parsing, word-level operations, and later pattern-based string problems.
+```cpp
+struct TrieNode {
+    TrieNode* child[26];
+    bool isEnd;
+    TrieNode() { isEnd = false; memset(child, 0, sizeof(child)); }
+};
+```
 
 ---
 
-Would you
+### 🧩 Problems:
 
+1. Implement Trie (insert/search)
+2. Longest common prefix
+3. Word break
+4. Search suggestions
 
+---
+
+## 🧩 8. DYNAMIC PROGRAMMING ON STRINGS
+
+These problems deal with **comparing or transforming strings**.
+
+| Problem                               | Core Idea                            | Time   |
+| ------------------------------------- | ------------------------------------ | ------ |
+| Longest Common Subsequence (LCS)      | DP[i][j] = 1 + DP[i-1][j-1] if match | O(n*m) |
+| Edit Distance                         | Insert / Delete / Replace            | O(n*m) |
+| Longest Palindromic Subsequence       | DP[i][j] = DP[i+1][j-1]+2 if match   | O(n²)  |
+| Minimum Insertions to make Palindrome | Related to LCS                       | O(n²)  |
+
+---
+
+### ✅ Example — Edit Distance
+
+```cpp
+int editDistance(string a, string b) {
+    int n=a.size(), m=b.size();
+    vector<vector<int>> dp(n+1, vector<int>(m+1));
+    for(int i=0;i<=n;i++) dp[i][0]=i;
+    for(int j=0;j<=m;j++) dp[0][j]=j;
+    for(int i=1;i<=n;i++)
+        for(int j=1;j<=m;j++)
+            if(a[i-1]==b[j-1]) dp[i][j]=dp[i-1][j-1];
+            else dp[i][j]=1+min({dp[i-1][j],dp[i][j-1],dp[i-1][j-1]});
+    return dp[n][m];
+}
+```
+
+---
+
+## 🔮 9. ADVANCED TOPICS
+
+### 🔹 Manacher’s Algorithm
+
+Find **Longest Palindromic Substring in O(n)** using mirrored center expansion.
+
+### 🔹 Suffix Array
+
+Sort all suffixes of a string — used in lexicographic comparison, substring search.
+
+### 🔹 Rolling Hash
+
+Efficiently compute substring hashes (used in Rabin-Karp).
+
+---
+
+## 🧩 10. MOST ASKED INTERVIEW PROBLEMS
+
+| Problem                          | Concept              | Level |
+| -------------------------------- | -------------------- | ----- |
+| Reverse words in a string        | Two pointers         | 🟢    |
+| Longest substring without repeat | Sliding Window       | 🟠    |
+| Check anagram                    | Frequency            | 🟢    |
+| Longest common prefix            | Trie / Sorting       | 🟡    |
+| Group Anagrams                   | Hashing              | 🟠    |
+| Minimum window substring         | Sliding Window       | 🔴    |
+| Edit distance                    | DP                   | 🔴    |
+| Longest Palindromic Substring    | Expand Around Center | 🟠    |
+
+---
+
+## ⚡ 11. PRACTICE ORDER (RECOMMENDED)
+
+| Stage | Focus                                 | Days              |
+| ----- | ------------------------------------- | ----------------- |
+| 1     | Basics + palindrome + reverse         | 2                 |
+| 2     | Frequency & anagram problems          | 2                 |
+| 3     | Sliding Window (substrings)           | 3                 |
+| 4     | Pattern Matching (KMP, Z, Rabin–Karp) | 3                 |
+| 5     | Trie problems                         | 3                 |
+| 6     | DP on strings                         | 5                 |
+| 7     | Manacher’s + Suffix Array             | Optional Advanced |
+
+---
+
+## 🚀 12. RESOURCES
+
+* 🔹 **YouTube:** Striver, CodeHelp by Love Babbar, TUF
+* 🔹 **Leetcode Set:** #3, #5, #14, #49, #76, #242, #647
+* 🔹 **Book:** “Cracking the Coding Interview” (Chapter: Strings)
+* 🔹 **Practice Sites:** Leetcode, InterviewBit, Codeforces (div 2B)
